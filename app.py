@@ -47,7 +47,7 @@ st.divider()
 # Dataframe selection
 st.markdown("<h2 align='center'> <b> Getting Started", unsafe_allow_html=True)
 new_line(1)
-st.write("The first step is to upload your data. You can upload your data either by : **Upload File**, or **Write URL**. In all ways the data should be a csv file and should not exceed 200 MB.")
+st.write("The first step is to upload your data. You can upload your data either by : **Upload File**, or **Write URL**. In all ways the data should be a csv file or Excel and should not exceed 200 MB.")
 new_line(1)
 
 
