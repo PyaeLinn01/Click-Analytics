@@ -54,7 +54,7 @@ def handle_missing_values(df):
         with col1:
             missing_df_cols = df.columns[df.isnull().any()].tolist()
             if missing_df_cols:
-                add_opt = ["All Numerical Features (ClickML Feature)", "All Categorical Feature (ClickML Feature)"]
+                add_opt = ["All Numerical Features (Default Feature)", "All Categorical Feature (Default Feature)"]
             else:
                 add_opt = []
             fill_feat = st.multiselect("Select Features",  missing_df_cols + add_opt ,  help="Select Features to fill missing values")
@@ -72,13 +72,13 @@ def handle_missing_values(df):
                 progress_bar()
                 
                 # All Numerical Features
-                if "All Numerical Features (ClickML Feature)" in fill_feat:
-                    fill_feat.remove("All Numerical Features (ClickML Feature)")
+                if "All Numerical Features (Default Feature)" in fill_feat:
+                    fill_feat.remove("All Numerical Features (Default Feature)")
                     fill_feat += df.select_dtypes(include=np.number).columns.tolist()
 
                 # All Categorical Features
-                if "All Categorical Feature (ClickML Feature)" in fill_feat:
-                    fill_feat.remove("All Categorical Feature (ClickML Feature)")
+                if "All Categorical Feature (Default Feature)" in fill_feat:
+                    fill_feat.remove("All Categorical Feature (Default Feature)")
                     fill_feat += df.select_dtypes(include=np.object).columns.tolist()
 
                 
