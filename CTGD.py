@@ -8,10 +8,10 @@ def handle_categorical_data(st, df):
 
 
 
+    # Encoding
     new_line()
     st.markdown("### 🔠 Handling Categorical Data", unsafe_allow_html=True)
     new_line()
-    
     with st.expander("Show Encoding"):
         new_line()
 
@@ -57,9 +57,9 @@ def handle_categorical_data(st, df):
         show_cat = st.checkbox("Show Categorical Features", value=False, key='show_cat')
         if show_cat:
             col1, col2 = st.columns(2)
-            col1.dataframe(df.select_dtypes(include=np.object), height=250, use_container_width=True)
-            if len(df.select_dtypes(include=np.object).columns.tolist()) > 1:
-                tmp = df.select_dtypes(include=np.object)
+            col1.dataframe(df.select_dtypes(include=[object]), height=250, use_container_width=True)
+            if len(df.select_dtypes(include=[object]).columns.tolist()) > 1:
+                tmp = df.select_dtypes(include=[object])
                 tmp = tmp.apply(lambda x: x.unique())
                 tmp = tmp.to_frame()
                 tmp.columns = ['Unique Values']
@@ -72,7 +72,7 @@ def handle_categorical_data(st, df):
             with col1:
                 new_line()
                 st.markdown("<h6 align='left'> Number of Unique Values</h6>", unsafe_allow_html=True)
-                unique_values = pd.DataFrame(df.select_dtypes(include=np.object).nunique())
+                unique_values = pd.DataFrame(df.select_dtypes(include=[object]).nunique())
                 unique_values.columns = ['# Unique Values']
                 unique_values = unique_values.sort_values(by='# Unique Values', ascending=False)
                 st.dataframe(unique_values, width=200, height=300)
@@ -80,7 +80,7 @@ def handle_categorical_data(st, df):
             with col2:
                 new_line()
                 st.markdown("<h6 align='center'> Plot for the Count of Unique Values </h6>", unsafe_allow_html=True)
-                unique_values = pd.DataFrame(df.select_dtypes(include=np.object).nunique())
+                unique_values = pd.DataFrame(df.select_dtypes(include=[object]).nunique())
                 unique_values.columns = ['# Unique Values']
                 unique_values = unique_values.sort_values(by='# Unique Values', ascending=False)
                 unique_values['Feature'] = unique_values.index
@@ -90,7 +90,7 @@ def handle_categorical_data(st, df):
         # Input for encoding
         col1, col2 = st.columns(2)
         with col1:
-            enc_feat = st.multiselect("Select Features", df.select_dtypes(include=np.object).columns.tolist(), key='encoding_feat', help="Select the categorical features to encode.")
+            enc_feat = st.multiselect("Select Features", df.select_dtypes(include=[object]).columns.tolist(), key='encoding_feat', help="Select the categorical features to encode.")
         with col2:
             encoding = st.selectbox("Select Encoding", ["Select", "Ordinal Encoding", "One Hot Encoding", "Count Frequency Encoding"], key='encoding', help="Select the encoding method.")
 
