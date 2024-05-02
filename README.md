@@ -1,4 +1,4 @@
 # Analytics-Clicks
 
 Machine Learning and Data Analytics Through simple Clicks!
-Simplified UI
+Simplified UI for better understanding
