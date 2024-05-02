@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from wordcloud import WordCloud
+from utils import new_line
 
 def show_eda(df):
     # Assuming necessary imports are available like numpy, pandas, seaborn, matplotlib, etc.
