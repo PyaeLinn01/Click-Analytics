@@ -15,7 +15,7 @@ from session_state import initial_state
 from data_loading import load_data
 import eda_module
 from missing_values_handler import handle_missing_values
-
+from CTGD import handle_categorical_data
 
 # Set configuration and initialize state
 set_page_config()
@@ -129,152 +129,8 @@ if st.session_state.df is not None:
 
 
     # Encoding
-    new_line()
-    st.markdown("### 🔠 Handling Categorical Data", unsafe_allow_html=True)
-    new_line()
-    with st.expander("Show Encoding"):
-        new_line()
+    handle_categorical_data(st, df)
 
-        # Explain
-        exp_enc = st.checkbox("Explain Encoding", value=False, key='exp_enc')
-        if exp_enc:
-            col1, col2 = st.columns([0.8,1])
-            with col1:
-                st.markdown("<h6 align='center'>Ordinal Encoding</h6>", unsafe_allow_html=True)
-                cola, colb = st.columns(2)
-                with cola:
-                    st.write("Before Encoding")
-                    st.dataframe(pd.DataFrame(np.array(['a','b','c','b','a']) ),width=120, height=200)
-                with colb:
-                    st.write("After Encoding")
-                    st.dataframe(pd.DataFrame(np.array([0,1,2,1,0])),width=120, height=200)
-
-            with col2:
-                st.markdown("<h6 align='center'>One Hot Encoding</h6>", unsafe_allow_html=True)
-                cola, colb = st.columns([0.7,1])
-                with cola:
-                    st.write("Before Encoding")
-                    st.dataframe(pd.DataFrame(np.array(['a','b','c', 'b','a']) ),width=150, height=200)
-                with colb:
-                    st.write("After Encoding")
-                    st.dataframe(pd.DataFrame(np.array([[1,0,0],[0,1,0],[0,0,1],[0,1,0],[1,0,0]])),width=200, height=200)
-
-            col1, col2, col3 = st.columns([0.5,1,0.5])
-            with col2:
-                new_line()
-                st.markdown("<h6 align='center'>Count Frequency Encoding</h6>", unsafe_allow_html=True)
-                cola, colb = st.columns([0.8,1])
-                with cola:
-                    st.write("Before Encoding")
-                    st.dataframe(pd.DataFrame(np.array(['a','b','c', 'b','a']) ),width=150, height=200)
-                with colb:
-                    st.write("After Encoding")
-                    st.dataframe(pd.DataFrame(np.array([0.4,0.4,0.2,0.4,0.4])),width=200, height=200)
-
-            new_line()
-        
-        # INFO
-        show_cat = st.checkbox("Show Categorical Features", value=False, key='show_cat')
-        # new_line()
-        if show_cat:
-            col1, col2 = st.columns(2)
-            col1.dataframe(df.select_dtypes(include=np.object), height=250, use_container_width=True )
-            if len(df.select_dtypes(include=np.object).columns.tolist()) > 1:
-                tmp = df.select_dtypes(include=np.object)
-                tmp = tmp.apply(lambda x: x.unique())
-                tmp = tmp.to_frame()
-                tmp.columns = ['Unique Values']
-                col2.dataframe(tmp, height=250, use_container_width=True )
-            
-        # Further Analysis
-        # new_line()
-        further_analysis = st.checkbox("Further Analysis", value=False, key='further_analysis')
-        if further_analysis:
-
-            col1, col2 = st.columns([0.5,1])
-            with col1:
-                # Each categorical feature has how many unique values as dataframe
-                new_line()
-                st.markdown("<h6 align='left'> Number of Unique Values", unsafe_allow_html=True)
-                unique_values = pd.DataFrame(df.select_dtypes(include=np.object).nunique())
-                unique_values.columns = ['# Unique Values']
-                unique_values = unique_values.sort_values(by='# Unique Values', ascending=False)
-                st.dataframe(unique_values, width=200, height=300)
-
-            with col2:
-                # Plot for the count of unique values for the categorical features
-                new_line()
-                st.markdown("<h6 align='center'> Plot for the Count of Unique Values ", unsafe_allow_html=True)
-                unique_values = pd.DataFrame(df.select_dtypes(include=np.object).nunique())
-                unique_values.columns = ['# Unique Values']
-                unique_values = unique_values.sort_values(by='# Unique Values', ascending=False)
-                unique_values['Feature'] = unique_values.index
-                fig = px.bar(unique_values, x='Feature', y='# Unique Values', color='# Unique Values', height=350)
-                st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-        # INPUT
-        col1, col2 = st.columns(2)
-        with col1:
-            enc_feat = st.multiselect("Select Features", df.select_dtypes(include=np.object).columns.tolist(), key='encoding_feat', help="Select the categorical features to encode.")
-
-        with col2:
-            encoding = st.selectbox("Select Encoding", ["Select", "Ordinal Encoding", "One Hot Encoding", "Count Frequency Encoding"], key='encoding', help="Select the encoding method.")
-
-
-        if enc_feat and encoding != "Select":
-            new_line()
-            col1, col2, col3 = st.columns([1,0.5,1])
-            if col2.button("Apply", key='encoding_apply',use_container_width=True ,help="Click to apply encoding."):
-                progress_bar()
-                # Ordinal Encoding
-                new_line()
-                if encoding == "Ordinal Encoding":
-                    st.session_state.all_the_process += f"""
-# Ordinal Encoding
-from sklearn.preprocessing import OrdinalEncoder
-encoder = OrdinalEncoder()
-cat_cols = {enc_feat}
-df[cat_cols] = encoder.fit_transform(df[cat_cols])
-\n """
-                    from sklearn.preprocessing import OrdinalEncoder
-                    encoder = OrdinalEncoder()
-                    cat_cols = enc_feat
-                    df[cat_cols] = encoder.fit_transform(df[cat_cols])
-                    st.session_state['df'] = df
-                    st.success(f"The Categories of the features **`{enc_feat}`** have been encoded using Ordinal Encoding.")
-                    
-                # One Hot Encoding
-                elif encoding == "One Hot Encoding":
-                    st.session_state.all_the_process += f"""
-# One Hot Encoding
-df = pd.get_dummies(df, columns={enc_feat})
-\n """
-                    df = pd.get_dummies(df, columns=enc_feat)
-                    st.session_state['df'] = df
-                    st.success(f"The Categories of the features **`{enc_feat}`** have been encoded using One Hot Encoding.")
-
-                # Count Frequency Encoding
-                elif encoding == "Count Frequency Encoding":
-                    st.session_state.all_the_process += f"""
-# Count Frequency Encoding
-df[{enc_feat}] = df[{enc_feat}].apply(lambda x: x.map(len(df) / x.value_counts()))
-\n """
-                    df[enc_feat] = df[enc_feat].apply(lambda x: x.map(len(df) / x.value_counts()))
-                    st.session_state['df'] = df
-                    st.success(f"The Categories of the features **`{enc_feat}`** have been encoded using Count Frequency Encoding.")
-
-        # Show DataFrame Button
-        # new_line()
-        col1, col2, col3 = st.columns([0.15,1,0.15])
-        col2.divider()
-        col1, col2, col3 = st.columns([1, 0.7, 1])
-        with col2:
-            show_df = st.button("Show DataFrame", key="cat_show_df", help="Click to show the DataFrame.")
-        if show_df:
-            st.dataframe(df, use_container_width=True)
 
 
     # Scaling
