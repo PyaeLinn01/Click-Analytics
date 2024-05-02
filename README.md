@@ -1,5 +1,7 @@
 # Click Analytics
 
+(Will opensource soon)
+
 Welcome to Click Analytics! 🚀 
 
 Dive right into the future of data with our user-friendly platform designed for everyone—no coding or machine learning experience required! With just a few clicks, you can start preparing your data, training cutting-edge models, and uncovering valuable insights. 
