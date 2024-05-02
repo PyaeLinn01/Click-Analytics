@@ -73,7 +73,7 @@ def show_eda(df):
         describe_cat = st.checkbox("Show Description **(Categorical Features)**", value=False)
         new_line()
         if describe_cat:
-            if df.select_dtypes(include=np.object).columns.tolist():
+            if df.select_dtypes(include=[object, 'string']).columns.tolist():
                 st.dataframe(df.describe(include=['object']), use_container_width=True)
                 new_line()
             else:
@@ -269,7 +269,7 @@ df.drop(columns={col_to_delete}, inplace=True)
         new_line()
         if st.checkbox("Show Word Cloud", value=False):
             # Get the list of object-type columns for user to choose from
-            text_col_options = df.select_dtypes(include=[np.object, 'string']).columns.tolist()
+            text_col_options = df.select_dtypes(include=[object, 'string']).columns.tolist()
             
             if text_col_options:
                 # Let the user select a text column
