@@ -1,6 +1,6 @@
 # Click Analytics
 
-(Will opensource soon)
+(Will modularize soon)
 
 Welcome to Click Analytics! 🚀 
 
