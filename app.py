@@ -14,6 +14,8 @@ from config import set_page_config
 from session_state import initial_state
 from data_loading import load_data
 import eda_module
+from missing_values_handler import handle_missing_values
+
 
 # Set configuration and initialize state
 set_page_config()
