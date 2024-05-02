@@ -9,108 +9,14 @@ import time
 from PIL import Image
 from wordcloud import WordCloud
 
-# Config
-page_icon = Image.open("./assets/logo.png")
-st.set_page_config(layout="centered", page_title="Click Analyst", page_icon=page_icon)
+from utils import new_line
+from config import set_page_config
+from session_state import initial_state
+from data_loading import load_data
 
-
-# Initial State
-def initial_state():
-    if 'df' not in st.session_state:
-        st.session_state['df'] = None
-
-    if 'X_train' not in st.session_state:
-        st.session_state['X_train'] = None
-
-    if 'X_test' not in st.session_state:
-        st.session_state['X_test'] = None
-
-    if 'y_train' not in st.session_state:
-        st.session_state['y_train'] = None
-
-    if 'y_test' not in st.session_state:
-        st.session_state['y_test'] = None
-
-    if 'X_val' not in st.session_state:
-        st.session_state['X_val'] = None
-
-    if 'y_val' not in st.session_state:
-        st.session_state['y_val'] = None
-
-    if "model" not in st.session_state:
-        st.session_state['model'] = None
-
-    if 'trained_model' not in st.session_state:
-        st.session_state['trained_model'] = False
-
-    if "trained_model_bool" not in st.session_state:
-        st.session_state['trained_model_bool'] = False
-
-    if "problem_type" not in st.session_state:
-        st.session_state['problem_type'] = None
-
-    if "metrics_df" not in st.session_state:
-        st.session_state['metrics_df'] = pd.DataFrame()
-
-    if "is_train" not in st.session_state:
-        st.session_state['is_train'] = False
-
-    if "is_test" not in st.session_state:
-        st.session_state['is_test'] = False
-
-    if "is_val" not in st.session_state:
-        st.session_state['is_val'] = False
-
-    if "show_eval" not in st.session_state:
-        st.session_state['show_eval'] = False
-
-    if "all_the_process" not in st.session_state:
-        st.session_state['all_the_process'] = """"""
-
-    if "all_the_process_predictions" not in st.session_state:
-        st.session_state['all_the_process_predictions'] = False
-
-    if 'y_pred_train' not in st.session_state:
-        st.session_state['y_pred_train'] = None
-
-    if 'y_pred_test' not in st.session_state:
-        st.session_state['y_pred_test'] = None
-
-    if 'y_pred_val' not in st.session_state:
-        st.session_state['y_pred_val'] = None
-
-    if 'uploading_way' not in st.session_state:
-        st.session_state['uploading_way'] = None
-
-    if "lst_models" not in st.session_state:
-        st.session_state["lst_models"] = []
-
-    if "lst_models_predctions" not in st.session_state:
-        st.session_state["lst_models_predctions"] = []
-
-    if "models_with_eval" not in st.session_state:
-        st.session_state["models_with_eval"] = dict()
-
-    if "reset_1" not in st.session_state:
-        st.session_state["reset_1"] = False
-
+# Set configuration and initialize state
+set_page_config()
 initial_state()
-
-# New Line
-def new_line(n=1):
-    for i in range(n):
-        st.write("\n")
-
-# Load Data
-st.cache_data()
-def load_data(upd_file):
-    # Read CSV or Excel file
-    if upd_file.name.endswith('.csv'):
-        return pd.read_csv(upd_file)
-    elif upd_file.name.endswith('.xlsx') or upd_file.name.endswith('.xls'):
-        return pd.read_excel(upd_file)
-    else:
-        raise ValueError("Unsupported file format. Only CSV and Excel files are supported.")
 
 
 # Progress Bar
