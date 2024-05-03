@@ -1,6 +1,6 @@
 # Click Analytics
 
-(Will modularize soon)
+(Currently very unstable donty use for now)
 
 Welcome to Click Analytics! 🚀 
 
