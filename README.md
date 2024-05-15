@@ -1,6 +1,6 @@
 # Click Analytics
 
-(Currently very unstable donty use for now)
+(Currently unstable I advise not using for now)
 
 Welcome to Click Analytics! 🚀 
 
