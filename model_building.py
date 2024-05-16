@@ -21,6 +21,12 @@ from transformation_functions import display_transformation_options
 from feature_engineering import extract_feature, transform_feature, select_feature, show_dataframe
 from data_splitting import split_data
 
+# Progress Bar
+def progress_bar():
+    my_bar = st.progress(0)
+    for percent_complete in range(100):
+        time.sleep(0.0002)
+        my_bar.progress(percent_complete + 1)
 
 def display_model_building_options():
 
