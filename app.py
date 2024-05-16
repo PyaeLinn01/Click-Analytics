@@ -19,7 +19,7 @@ from CTGD import handle_categorical_data
 from scaling_functions import display_scaling_options
 from transformation_functions import display_transformation_options
 from feature_engineering import extract_feature, transform_feature, select_feature, show_dataframe
-from model_building import build_model
+from model_building import *
 
 
 # Set configuration and initialize state
