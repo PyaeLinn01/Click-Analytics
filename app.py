@@ -172,7 +172,6 @@ if st.session_state.df is not None:
         display_model_building_options()
 
 
-
     # Evaluation
     if st.session_state['trained_model_bool']:
         st.markdown("### 📈 Evaluation")
