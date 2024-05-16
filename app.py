@@ -169,7 +169,7 @@ if st.session_state.df is not None:
 
     # Building the model
     if 'X_train' in st.session_state and 'y_train' in st.session_state:
-        display_model_building_options():
+        display_model_building_options()
 
 
 
