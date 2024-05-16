@@ -18,6 +18,7 @@ from missing_values_handler import handle_missing_values
 from CTGD import handle_categorical_data
 from scaling_functions import display_scaling_options
 from transformation_functions import display_transformation_options
+from feature_engineering import extract_feature, transform_feature, select_feature, show_dataframe
 
 
 # Set configuration and initialize state
@@ -125,7 +126,6 @@ if st.session_state.df is not None:
     # Call to the EDA module function
     eda_module.show_eda(df)
 
-        
 
     # Missing Values
     handle_missing_values(df)
@@ -135,15 +135,12 @@ if st.session_state.df is not None:
     handle_categorical_data(st, df)
 
 
-
     # Scaling
     new_line()
     st.markdown("### ⚖️ Scaling", unsafe_allow_html=True)
     new_line()
     with st.expander("Show Scaling"):
         new_line()
-
-
 
         # Scaling Methods
         display_scaling_options(st, df)
@@ -153,160 +150,16 @@ if st.session_state.df is not None:
     display_transformation_options(st, df)
 
 
+    
     # Feature Engineering
     new_line()
     st.markdown("### ⚡ Feature Engineering", unsafe_allow_html=True)
     new_line()
     with st.expander("Show Feature Engineering"):
-
-        # Feature Extraction
-        new_line()
-        st.markdown("#### Feature Extraction", unsafe_allow_html=True)
-        new_line()
-
-        col1, col2, col3 = st.columns(3)
-        with col1:  
-            feat1 = st.selectbox("First Feature/s", ["Select"] + df.select_dtypes(include=np.number).columns.tolist(), key="feat_ex1", help="Select the first feature/s you want to extract.")
-        with col2:
-            op = st.selectbox("Mathematical Operation", ["Select", "Addition +", "Subtraction -", "Multiplication *", "Division /"], key="feat_ex_op", help="Select the mathematical operation you want to apply.")
-        with col3:
-            feat2 = st.selectbox("Second Feature/s",["Select"] + df.select_dtypes(include=np.number).columns.tolist(), key="feat_ex2", help="Select the second feature/s you want to extract.")
-
-        if feat1 and op != "Select" and feat2:
-            col1, col2, col3 = st.columns(3)
-            with col2:
-                feat_name = st.text_input("Feature Name", key="feat_name", help="Enter the name of the new feature.")
-
-            col1, col2, col3 = st.columns([1, 0.6, 1])
-            new_line()
-            if col2.button("Extract Feature"):
-                if feat_name == "":
-                    feat_name = f"({feat1} {op} {feat2})"
-
-                if op == "Addition +":
-                    st.session_state.all_the_process += f"""
-# Feature Extraction - Addition
-df[{feat_name}] = df[{feat1}] + df[{feat2}]
-\n """
-                    df[feat_name] = df[feat1] + df[feat2]
-                    st.session_state['df'] = df
-                    st.success(f"Feature '**_{feat_name}_**' has been extracted using Addition.")
-
-                elif op == "Subtraction -":
-                    st.session_state.all_the_process += f"""
-# Feature Extraction - Subtraction
-df[{feat_name}] = df[{feat1}] - df[{feat2}]
-\n """
-                    df[feat_name] = df[feat1] - df[feat2]
-                    st.session_state['df'] = df
-                    st.success(f"Feature {feat_name} has been extracted using Subtraction.")
-
-                elif op == "Multiplication *":
-                    st.session_state.all_the_process += f"""
-# Feature Extraction - Multiplication
-df[{feat_name}] = df[{feat1}] * df[{feat2}]
-\n """
-                    df[feat_name] = df[feat1] * df[feat2]
-                    st.session_state['df'] = df
-                    st.success(f"Feature {feat_name} has been extracted using Multiplication.")
-
-                elif op == "Division /":
-                    st.session_state.all_the_process += f"""
-# Feature Extraction - Division
-df[{feat_name}] = df[{feat1}] / df[{feat2}]
-\n """
-                    df[feat_name] = df[feat1[0]] / df[feat2[0]]
-                    st.session_state['df'] = df
-                    st.success(f"Feature {feat_name} has been extracted using Division.")
-
-
-
-        # Feature Transformation
-        st.divider()
-        st.markdown("#### Feature Transformation", unsafe_allow_html=True)
-        new_line()
-
-        col1, col2, col3 = st.columns(3)
-        with col1:    
-            feat_trans = st.multiselect("Select Feature/s", df.select_dtypes(include=np.number).columns.tolist(), help="Select the Features you want to Apply transformation operation on it")
-        with col2:
-            op = st.selectbox("Select Operation", ["Select", "Addition +", "Subtraction -", "Multiplication *", "Division /", ], key='feat_trans_op', help="Select the operation you want to apply on the feature")
-        with col3:
-            value = st.text_input("Enter Value", key='feat_trans_val', help="Enter the value you want to apply the operation on it")
-
-        
-
-        if op != "Select" and value != "":
-            new_line()
-            col1, col2, col3 = st.columns([1, 0.7, 1])
-            if col2.button("Transform Feature"):
-                if op == "Addition +":
-                    st.session_state.all_the_process += f"""
-# Feature Transformation - Addition
-df[{feat_trans}] = df[{feat_trans}] + {value}
-\n """
-                    df[feat_trans] = df[feat_trans] + float(value)
-                    st.session_state['df'] = df
-                    st.success(f"The Features **`{feat_trans}`** have been transformed using Addition with the value **`{value}`**.")
-
-                elif op == "Subtraction -":
-                    st.session_state.all_the_process += f"""
-# Feature Transformation - Subtraction
-df[{feat_trans}] = df[{feat_trans}] - {value}
-\n """
-                    df[feat_trans] = df[feat_trans] - float(value)
-                    st.session_state['df'] = df
-                    st.success(f"The Features **`{feat_trans}`** have been transformed using Subtraction with the value **`{value}`**.")
-
-                elif op == "Multiplication *":
-                    st.session_state.all_the_process += f"""
-# Feature Transformation - Multiplication
-df[{feat_trans}] = df[{feat_trans}] * {value}
-\n """
-                    df[feat_trans] = df[feat_trans] * float(value)
-                    st.session_state['df'] = df
-                    st.success(f"The Features **`{feat_trans}`** have been transformed using Multiplication with the value **`{value}`**.")
-
-                elif op == "Division /":
-                    st.session_state.all_the_process += f"""
-# Feature Transformtaion - Division
-df[{feat_trans}] = df[{feat_trans}] / {value}
-\n """
-                    df[feat_trans] = df[feat_trans] / float(value)
-                    st.session_state['df'] = df
-                    st.success(f"The Featueres **`{feat_trans}`** have been transformed using Division with the value **`{value}`**.")
-
-
-
-        # Feature Selection
-        st.divider()
-        st.markdown("#### Feature Selection", unsafe_allow_html=True)
-        new_line()
-
-        feat_sel = st.multiselect("Select Feature/s", df.columns.tolist(), key='feat_sel', help="Select the Features you want to keep in the dataset")
-        new_line()
-
-        if feat_sel:
-            col1, col2, col3 = st.columns([1, 0.7, 1])
-            if col2.button("Select Features"):
-                st.session_state.all_the_process += f"""
-# Feature Selection\ndf = df[{feat_sel}]
-\n """
-                progress_bar()
-                new_line()
-                df = df[feat_sel]
-                st.session_state['df'] = df
-                st.success(f"The Features **`{feat_sel}`** have been selected.")
-        
-        # Show DataFrame Button
-        col1, col2, col3 = st.columns([0.15,1,0.15])
-        col2.divider()
-        col1, col2, col3 = st.columns([0.9, 0.6, 1])
-        with col2:
-            show_df = st.button("Show DataFrame", key="feat_eng_show_df", help="Click to show the DataFrame.")
-        
-        if show_df:
-            st.dataframe(df, use_container_width=True)
+        df = extract_feature(df)
+        df = transform_feature(df)
+        df = select_feature(df)
+        show_dataframe(df)
 
 
     # Data Splitting
