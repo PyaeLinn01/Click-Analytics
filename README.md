@@ -1,6 +1,6 @@
 # Click Analytics
 
-(Currently unstable I advise not using for a moment)
+Can try out (still has bugs and error handling requirements)
 
 Welcome to Click Analytics! 🚀 
 
