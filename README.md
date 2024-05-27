@@ -1,6 +1,6 @@
 # Click Analytics
 
-Can try out (still has bugs and error handling requirements)
+Can try out (still has bugs and error handling requirements!)
 
 Welcome to Click Analytics! 🚀 
 
