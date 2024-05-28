@@ -6,8 +6,6 @@ from utils import new_line
 
 def handle_categorical_data(st, df):
 
-
-
     # Encoding
     new_line()
     st.markdown("### 🔠 Handling Categorical Data", unsafe_allow_html=True)
