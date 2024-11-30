@@ -11,3 +11,6 @@ With just a few clicks, you can start preparing your data, training cutting-edge
 Whether you're a data enthusiast or a seasoned analyst, Click Analytics empowers you to effortlessly create, analyze, and explore. 
 
 What are you waiting for? Start building your very own analytics and models today and see what decisions you can empower with your data!!
+
+
+Feel free to fork, contribute and modify
